@@ -91,3 +91,29 @@ Please note that you will also need a speech synthesizer installed (e.g. [Piper]
 ## Legal
 
 The Discord app itself is **proprietary** (closed source).
+
+## Experimental Linux Lock Bridge
+
+This branch carries an experimental Flatpak packaging patch for Linux session
+lock detection. Electron does not emit `powerMonitor` `lock-screen` and
+`unlock-screen` events on Linux, so the build patches Discord's packaged
+`discord_desktop_core/core.asar` to forward logind session `Lock`/`Unlock`
+signals through the same Discord IPC event names used on macOS and Windows.
+
+Build and install the patched Flatpak locally with:
+
+```sh
+./scripts/build-install-local.sh
+```
+
+The local build installs as a user Flatpak from `discord-origin`. Remove it and
+fall back to the Flathub system install with:
+
+```sh
+flatpak uninstall --user com.discordapp.Discord//master
+```
+
+CI builds the Flatpak and verifies that `core.asar` still contains the Linux lock
+bridge markers. The scheduled update workflow rebases this branch on Flathub's
+`master`, runs `flatpak-external-data-checker`, and fails if the upstream bundle
+layout changes in a way that prevents the patch from applying.
