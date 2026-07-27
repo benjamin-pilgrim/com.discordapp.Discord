@@ -29,6 +29,7 @@ jobs:
         run: |
           dbus-run-session -- flatpak-builder \
             --force-clean \
+            --disable-rofiles-fuse \
             --install-deps-from=flathub \
             --repo=repo \
             build-dir \
