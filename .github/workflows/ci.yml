@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         run: |
-          flatpak-builder \
+          dbus-run-session -- flatpak-builder \
             --force-clean \
             --install-deps-from=flathub \
             --repo=repo \
