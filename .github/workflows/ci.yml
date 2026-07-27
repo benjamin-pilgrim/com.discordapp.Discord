@@ -19,6 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Prepare Flatpak container
+        run: |
+          if [ ! -s /etc/machine-id ]; then
+            dbus-uuidgen > /etc/machine-id
+          fi
+
       - name: Build
         run: |
           flatpak-builder \
